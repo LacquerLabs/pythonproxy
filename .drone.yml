@@ -1,0 +1,13 @@
+kind: pipeline
+type: docker
+name: LL-pythonproxy
+
+steps:
+    - name: docker  
+      image: plugins/docker
+      settings:
+        repo: lacquerlabs/pythonproxy
+        username:
+          from_secret: docker_username
+        password:
+          from_secret: docker_password
