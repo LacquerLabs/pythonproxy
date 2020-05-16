@@ -1,11 +1,11 @@
 kind: pipeline
-type: docker
 
 steps:
     - name: docker  
       image: plugins/docker
       settings:
         repo: lacquerlabs/pythonproxy
+        tags: latest
         username:
           from_secret: docker_username
         password:
