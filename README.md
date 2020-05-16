@@ -2,6 +2,8 @@
 
 ## build
 
+[![Build Status](https://drone.whamcat.com/api/badges/LacquerLabs/pythonproxy/status.svg)](https://drone.whamcat.com/LacquerLabs/pythonproxy)
+
 docker build -t pythonproxy .
 
 ## run

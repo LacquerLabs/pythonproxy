@@ -1,6 +1,5 @@
 kind: pipeline
 type: docker
-name: LL-pythonproxy
 
 steps:
     - name: docker  
