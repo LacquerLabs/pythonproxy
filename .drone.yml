@@ -3,6 +3,7 @@ kind: pipeline
 steps:
     - name: docker  
       image: plugins/docker
+      privileged: true
       settings:
         repo: lacquerlabs/pythonproxy
         tags: latest
