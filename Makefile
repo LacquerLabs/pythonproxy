@@ -1,8 +1,9 @@
 .DEFAULT_GOAL := help
 
 build: ## Build the containers
-	docker-compose pull && \
-	docker-compose build --force-rm --parallel
+	@docker build \
+		--build-arg VCS_REF=`git rev-parse --short HEAD` \
+		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` .
 
 rebuild: ## Build it without using cache
 	docker-compose pull && \

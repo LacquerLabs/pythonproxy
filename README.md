@@ -3,6 +3,8 @@
 ## build
 
 [![Build Status](https://drone.whamcat.com/api/badges/LacquerLabs/pythonproxy/status.svg)](https://drone.whamcat.com/LacquerLabs/pythonproxy)
+[![](https://images.microbadger.com/badges/version/lacquerlabs/pythonproxy.svg)](https://hub.docker.com/repository/docker/lacquerlabs/pythonproxy)
+[![](https://images.microbadger.com/badges/image/lacquerlabs/pythonproxy.svg)](https://hub.docker.com/repository/docker/lacquerlabs/pythonproxy)
 
 docker build -t pythonproxy .
 
