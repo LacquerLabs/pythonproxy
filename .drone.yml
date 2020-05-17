@@ -24,6 +24,9 @@ steps:
     commands:
       - docker login -u $${DOCKER_USERNAME} -p $${DOCKER_PASSWORD}
       - docker push $${DOCKER_IMAGE_NAME}
+      volumes:
+        - name: docker_socket
+          path: /var/run/docker.sock
 
 volumes:
   - name: docker_socket
