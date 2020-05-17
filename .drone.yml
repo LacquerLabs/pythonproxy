@@ -3,10 +3,12 @@ kind: pipeline
 steps:
   - name: build a docker image
     image: docker
+    secrets: [ docker_name ]
     commands:
+      - export
+      - env
       - echo ${DOCKER_NAME}
       - docker build -t $${DOCKER_NAME} .
-    secrets: [ docker_name ]
     volumes:
       - name: docker_socket
         path: /var/run/docker.sock
