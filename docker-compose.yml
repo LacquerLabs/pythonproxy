@@ -1,0 +1,15 @@
+version: '3.5'
+services:
+  pythonproxy:
+    container_name: pythonproxy
+    image: lacquerlabs/pythonproxy:latest
+    restart: "no"
+    ports:
+      - "3141:3141"
+    volumes:
+      - ${PWD}/persistent:/app/server
+    environment:
+      - CLIENT_HOST=host.docker.internal
+      - CLIENT_PORT=3141
+    labels:
+      - traefik.enable=false

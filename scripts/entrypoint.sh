@@ -18,16 +18,21 @@ for script in /container-init.d/*; do
 done
 
 if [ "$1" == "default" ]; then
-	echo "starting devpi server...."
+	if [ ! -f ${DEVPISERVER_SERVERDIR}/.serverversion ]; then
+		echo "Initializing devpi server..."
+		/scripts/mirror_init.sh
+		RESULT=$?
+		if [ $RESULT != 0 ]; then
+			exit
+		fi
+	fi
+	echo "Starting devpi server...."
 	devpi-server --host 0.0.0.0 --port ${APP_PORT} --serverdir ${DEVPISERVER_SERVERDIR}
-elif [ "$1" == "init" ]; then
-	echo "Initializing mirror..."
-	/scripts/mirror_init.sh
 elif [ "$1" == "add" ]; then
 	echo "Adding mirror..."
-	/scripts/mirror_add.sh $2 $3
+	/mirror_add.sh $2 $3
 elif [ "$1" == "shell" ]; then
-	echo "starting /bin/bash..."
+	echo "Starting /bin/bash..."
 	/bin/bash
 else
 	echo "Running something else ($@)"

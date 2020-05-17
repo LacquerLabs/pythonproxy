@@ -42,14 +42,15 @@ COPY ./scripts /scripts
 RUN apt-get update && \
     apt-get install --no-install-recommends -y dumb-init && \
     rm -rf /var/lib/apt/lists/* && \
-    chmod a+x /scripts/* && \
+    chmod a+x /scripts/*.sh && \
     pip install pipenv virtualenv
 
 ## copy over our Pipfiles for max cache effort
 # how pipfile was generated:
 #   - pipenv install --python=$(which python) devpi-server devpi-client devpi-web
-COPY ./app/Pipfile /${APP_HOME}/Pipfile
-COPY ./app/Pipfile.lock /${APP_HOME}/Pipfile.lock
+COPY ./app/Pipfile ${APP_HOME}/Pipfile
+COPY ./app/Pipfile.lock ${APP_HOME}/Pipfile.lock
+
 # run our package install with sync since we already have a valid lockfile
 RUN pipenv sync --python=$(which python) --verbose
 
@@ -59,14 +60,14 @@ RUN chmod a+rw -R ${APP_HOME}
 USER docker
 ### SETUP APP ###
 
-ENV DEVPISERVER_SERVERDIR=/${APP_HOME}/server \
-    DEVPICLIENT_CLIENTDIR=/${APP_HOME}/client
+ENV DEVPISERVER_SERVERDIR=${APP_HOME}/server \
+    DEVPICLIENT_CLIENTDIR=${APP_HOME}/client
 
 RUN mkdir -p ${DEVPISERVER_SERVERDIR} ${DEVPICLIENT_CLIENTDIR}
 
 ### END APP SETUP ###
 
-VOLUME ${APP_HOME}
+VOLUME ${APP_HOME}/server
 EXPOSE ${APP_PORT}
 ENTRYPOINT [ "/scripts/entrypoint.sh" ]
 CMD [ "default" ]

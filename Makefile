@@ -10,8 +10,8 @@ build: ## Build the containers
 rebuild: ## Build it without using cache
 	@docker build --no-cache -t ${IMAGENAME}:latest .
 
-run: ## Run the compose stack
-	docker-compose up --force-recreate
+rundocker: ## Run the compose stack
+	docker run -it lacquerlabs/pythonproxy:latest
 
 init: ## initalize a running service
 
