@@ -22,7 +22,7 @@ steps:
       DOCKER_PASSWORD:
         from_secret: docker_password
     commands:
-      - docker tag $${DOCKER_IMAGE_NAME}:${CI_BUILD_NUMBER}
+      - docker tag $${DOCKER_IMAGE_NAME} $${DOCKER_IMAGE_NAME}:${CI_BUILD_NUMBER}
       - docker login -u $${DOCKER_USERNAME} -p $${DOCKER_PASSWORD}
       - docker push $${DOCKER_IMAGE_NAME}
     volumes:
