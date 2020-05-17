@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := help
 
 build: ## Build the container image
-	@docker build \
+	@docker build --no-cache \
 		--build-arg MIRROR_HOST=host.docker.internal \
 		--build-arg MIRROR_URL=http://host.docker.internal:3141/root/mirror \
 		-t myapp:latest .

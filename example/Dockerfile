@@ -9,17 +9,11 @@ ARG MIRROR_HOST
 ENV APP_HOME=${APP_HOME:-/app}
 ENV MIRROR_URL=${MIRROR_URL}
 ENV MIRROR_HOST=${MIRROR_HOST}
-ENV PIPENV_PYPI_MIRROR=${MIRROR_URL}
+
 ENV PIP_INDEX_URL=${MIRROR_URL:+${MIRROR_URL}/+simple/}
 ENV PIP_TRUSTED_HOST=${MIRROR_HOST}
 
-# python/pipenv setup and activate overrides
-ENV PATH="${APP_HOME}/.venv/bin:${PATH}" \
-    PIPENV_PYTHON="${APP_HOME}/bin/python" \
-    PIPENV_YES=1 \
-    PIPENV_MAX_SUBPROCESS=5 \
-    PIPENV_VENV_IN_PROJECT=1 \
-    PYTHONUNBUFFERED=1
+
 
 ### End of what you need to do to use the mirror
 ### more normal dockerfile stuff
