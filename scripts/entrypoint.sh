@@ -20,9 +20,12 @@ done
 if [ "$1" == "default" ]; then
 	echo "starting devpi server...."
 	devpi-server --host 0.0.0.0 --port ${APP_PORT} --serverdir ${DEVPISERVER_SERVERDIR}
+elif [ "$1" == "init" ]; then
+	echo "Initializing mirror..."
+	/scripts/mirror_init.sh
 elif [ "$1" == "add" ]; then
 	echo "Adding mirror..."
-	/add_mirror.sh $2 $3
+	/scripts/mirror_add.sh $2 $3
 elif [ "$1" == "shell" ]; then
 	echo "starting /bin/bash..."
 	/bin/bash

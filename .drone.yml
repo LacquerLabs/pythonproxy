@@ -1,17 +1,28 @@
 kind: pipeline
 
 steps:
-  - name: build a docker image
+  - name: Build the docker image
     image: docker
     environment:
       DOCKER_IMAGE_NAME:
         from_secret: docker_image_name
     commands:
-      - docker build --build-arg VCS_REF=`git rev-parse --short HEAD` --build-arg VERSION=${CI_BUILD_NUMBER} .
+      - docker build --build-arg VCS_REF=`git rev-parse --short HEAD` --build-arg VERSION=${CI_BUILD_NUMBER} -t $${DOCKER_IMAGE_NAME} .
     volumes:
       - name: docker_socket
         path: /var/run/docker.sock
-  - name: push image to dockerhub
+  - name: Tag the image
+    image: docker
+    environment:
+      DOCKER_IMAGE_NAME:
+        from_secret: docker_image_name
+    commands:
+      - docker tag $${DOCKER_IMAGE_NAME} $${DOCKER_IMAGE_NAME}:latest
+      - docker tag $${DOCKER_IMAGE_NAME} $${DOCKER_IMAGE_NAME}:${CI_BUILD_NUMBER}
+    volumes:
+      - name: docker_socket
+        path: /var/run/docker.sock
+  - name: Push image to docker hub
     image: docker
     environment:
       DOCKER_IMAGE_NAME:
@@ -21,9 +32,15 @@ steps:
       DOCKER_PASSWORD:
         from_secret: docker_password
     commands:
-      - docker tag $${DOCKER_IMAGE_NAME} $${DOCKER_IMAGE_NAME}:${CI_BUILD_NUMBER}
       - docker login -u $${DOCKER_USERNAME} -p $${DOCKER_PASSWORD}
       - docker push $${DOCKER_IMAGE_NAME}
+    volumes:
+      - name: docker_socket
+        path: /var/run/docker.sock
+  - name: Clean up of docker cache
+    image: docker
+    commands:
+      - docker system prune -f
     volumes:
       - name: docker_socket
         path: /var/run/docker.sock

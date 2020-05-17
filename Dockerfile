@@ -2,6 +2,7 @@ FROM python:3.6-slim
 
 ARG APP_HOME
 ARG APP_PORT
+# ARG MIRROR_URL
 
 # For fancy badges
 # Build-time metadata as defined at http://label-schema.org
@@ -20,6 +21,11 @@ LABEL org.label-schema.name="PythonProxy" \
 
 ENV APP_HOME=${APP_HOME:-/app}
 ENV APP_PORT=${APP_PORT:-3141}
+ENV CLIENT_HOST=host.docker.internal
+ENV CLIENT_PORT=${APP_PORT}
+
+# ENV PIPENV_PYPI_MIRROR=${MIRROR_URL}
+# ENV PIP_INDEX_URL=${MIRROR_URL}/+simple/
 
 # python/pipenv setup and activate overrides
 ENV PATH="${APP_HOME}/.venv/bin:${PATH}" \
@@ -39,18 +45,18 @@ RUN addgroup --gid "${GID}" "${USER}" && \
 
 # setup app space
 WORKDIR ${APP_HOME}
-COPY entrypoint.sh /entrypoint.sh
-COPY add_mirror.sh /add_mirror.sh
+COPY ./scripts /scripts
 RUN apt-get update && \
     apt-get install --no-install-recommends -y dumb-init && \
     rm -rf /var/lib/apt/lists/* && \
-    chmod a+x /entrypoint.sh /add_mirror.sh && \
+    chmod a+x /scripts/* && \
     pip install pipenv virtualenv
 
 ## copy over our Pipfiles for max cache effort
-# pipenv install --python=$(which python) devpi-server devpi-client devpi-web
-COPY Pipfile /${APP_HOME}/Pipfile
-COPY Pipfile.lock /${APP_HOME}/Pipfile.lock
+# how pipfile was generated:
+#   - pipenv install --python=$(which python) devpi-server devpi-client devpi-web
+COPY ./app/Pipfile /${APP_HOME}/Pipfile
+COPY ./app/Pipfile.lock /${APP_HOME}/Pipfile.lock
 # run our package install with sync since we already have a valid lockfile
 RUN pipenv sync --python=$(which python) --verbose
 
@@ -65,17 +71,9 @@ ENV DEVPISERVER_SERVERDIR=/${APP_HOME}/server \
 
 RUN mkdir -p ${DEVPISERVER_SERVERDIR} ${DEVPICLIENT_CLIENTDIR}
 
-# temporarily start and initialize the devpi-server
-RUN devpi-init --serverdir ${DEVPISERVER_SERVERDIR} && \
-    ( devpi-server --host 0.0.0.0 --port ${APP_PORT} --serverdir ${DEVPISERVER_SERVERDIR} & ) && \
-    sleep 4 && \
-    devpi --clientdir ${DEVPICLIENT_CLIENTDIR} use http://localhost:${APP_PORT} && \
-    devpi --clientdir ${DEVPICLIENT_CLIENTDIR} login root --password='' && \
-    devpi --clientdir ${DEVPICLIENT_CLIENTDIR} index -c root/mirror bases=root/pypi volatile=True mirror_whitelist="*"
-
 ### END APP SETUP ###
 
 VOLUME ${APP_HOME}
 EXPOSE ${APP_PORT}
-ENTRYPOINT [ "/entrypoint.sh" ]
+ENTRYPOINT [ "/scripts/entrypoint.sh" ]
 CMD [ "default" ]

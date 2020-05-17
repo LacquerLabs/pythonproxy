@@ -19,6 +19,10 @@ docker run --name scallion --rm -it lacquerlabs/pythonproxy add gemfury https://
 
 ## NOTES
 
+for pip:
+export PIP_INDEX_URL=http://localhost:3141/root/mirror/+simple/
+
+
 export PIPENV_VENV_IN_PROJECT=1
 export PIPENV_PYPI_MIRROR=http://localhost:3141/root/mirror
 

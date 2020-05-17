@@ -1,20 +1,22 @@
 .DEFAULT_GOAL := help
 
+ORG = lacquerlabs
+NAME = pythonproxy
+IMAGENAME = $(ORG)/$(NAME)
+
 build: ## Build the containers
-	@docker build \
-		--build-arg VCS_REF=`git rev-parse --short HEAD` \
-		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` .
+	@docker build --build-arg VCS_REF=`git rev-parse --short HEAD` -t ${IMAGENAME}:latest .
 
 rebuild: ## Build it without using cache
-	docker-compose pull && \
-	docker-compose build --force-rm --no-cache --pull --parallel
+	@docker build --no-cache --build-arg VCS_REF=`git rev-parse --short HEAD` -t ${IMAGENAME}:latest .
 
 run: ## Run the compose stack
-	helpers/docker_network.sh start && \
 	docker-compose up --force-recreate
 
+init: ## initalize a running service
+
 connect: ## connect to the running service
-	docker-compose exec dockgo /bin/sh
+	docker-compose exec pythonproxy shell
 
 kill: ## kill the running stack
 	docker-compose kill
