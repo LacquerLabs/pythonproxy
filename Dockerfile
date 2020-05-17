@@ -17,8 +17,8 @@ ENV APP_PORT=${APP_PORT:-3141}
 ENV CLIENT_HOST=host.docker.internal
 ENV CLIENT_PORT=${APP_PORT}
 
-# ENV PIPENV_PYPI_MIRROR=${MIRROR_URL}
-# ENV PIP_INDEX_URL=${MIRROR_URL}/+simple/
+ENV PIPENV_PYPI_MIRROR=${MIRROR_URL}
+ENV PIP_INDEX_URL=${MIRROR_URL:+${MIRROR_URL}/+simple/}
 
 # python/pipenv setup and activate overrides
 ENV PATH="${APP_HOME}/.venv/bin:${PATH}" \

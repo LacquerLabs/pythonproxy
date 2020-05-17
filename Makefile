@@ -13,7 +13,10 @@ rebuild: ## Build it without using cache
 rundocker: ## Run the compose stack
 	docker run -it lacquerlabs/pythonproxy:latest
 
-init: ## initalize a running service
+initstorage: ## initalize the persistent storage
+	@rm -rf ./persistent
+	@mkdir ./persistent 
+	@echo > ./persistent/.gitkeep
 
 connect: ## connect to the running service
 	docker-compose exec pythonproxy shell
