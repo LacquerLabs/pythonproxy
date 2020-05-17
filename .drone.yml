@@ -1,17 +1,17 @@
 kind: pipeline
 
 steps:
-  - name: Build the docker image
+  - name: Build image
     image: docker
     environment:
       DOCKER_IMAGE_NAME:
         from_secret: docker_image_name
     commands:
-      - docker build --build-arg VCS_REF=`git rev-parse --short HEAD` --build-arg VERSION=${CI_BUILD_NUMBER} -t $${DOCKER_IMAGE_NAME} .
+      - docker build -t $${DOCKER_IMAGE_NAME} .
     volumes:
       - name: docker_socket
         path: /var/run/docker.sock
-  - name: Tag the image
+  - name: Tag image
     image: docker
     environment:
       DOCKER_IMAGE_NAME:
@@ -22,7 +22,7 @@ steps:
     volumes:
       - name: docker_socket
         path: /var/run/docker.sock
-  - name: Push image to docker hub
+  - name: Push image
     image: docker
     environment:
       DOCKER_IMAGE_NAME:
@@ -37,7 +37,7 @@ steps:
     volumes:
       - name: docker_socket
         path: /var/run/docker.sock
-  - name: Clean up of docker cache
+  - name: Clean Docker Cache
     image: docker
     commands:
       - docker system prune -f

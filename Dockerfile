@@ -4,18 +4,11 @@ ARG APP_HOME
 ARG APP_PORT
 # ARG MIRROR_URL
 
-# For fancy badges
-# Build-time metadata as defined at http://label-schema.org
-ARG VCS_REF
-ARG VERSION
 LABEL org.label-schema.name="PythonProxy" \
-        org.label-schema.description="Simple PythonProxy with devpi" \
-        org.label-schema.url="https://github.com/LacquerLabs/pythonproxy" \
-        org.label-schema.vcs-ref=$VCS_REF \
-        org.label-schema.vcs-url="https://github.com/LacquerLabs/pythonproxy" \
-        org.label-schema.vendor="LacquerLabs" \
-        org.label-schema.version=$VERSION \
-        org.label-schema.schema-version="1.0"
+      org.label-schema.description="Simple PythonProxy with devpi" \
+      org.label-schema.url="https://github.com/LacquerLabs/pythonproxy" \
+      org.label-schema.vcs-url="https://github.com/LacquerLabs/pythonproxy" \
+      org.label-schema.vendor="LacquerLabs"
 
 ### SETUP PORTABLE PYTHON ENV ###
 

@@ -5,10 +5,10 @@ NAME = pythonproxy
 IMAGENAME = $(ORG)/$(NAME)
 
 build: ## Build the containers
-	@docker build --build-arg VCS_REF=`git rev-parse --short HEAD` -t ${IMAGENAME}:latest .
+	@docker build -t ${IMAGENAME}:latest .
 
 rebuild: ## Build it without using cache
-	@docker build --no-cache --build-arg VCS_REF=`git rev-parse --short HEAD` -t ${IMAGENAME}:latest .
+	@docker build --no-cache -t ${IMAGENAME}:latest .
 
 run: ## Run the compose stack
 	docker-compose up --force-recreate
