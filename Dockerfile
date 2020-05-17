@@ -1,30 +1,34 @@
 FROM python:3.6-slim
 
-ARG APP_HOME
-ARG APP_PORT
-# ARG MIRROR_URL
-
 LABEL org.label-schema.name="PythonProxy" \
       org.label-schema.description="Simple PythonProxy with devpi" \
       org.label-schema.url="https://github.com/LacquerLabs/pythonproxy" \
       org.label-schema.vcs-url="https://github.com/LacquerLabs/pythonproxy" \
       org.label-schema.vendor="LacquerLabs"
 
-### SETUP PORTABLE PYTHON ENV ###
+ARG APP_HOME
+ARG APP_PORT
+ARG MIRROR_URL
+ARG MIRROR_HOST
 
 ENV APP_HOME=${APP_HOME:-/app}
 ENV APP_PORT=${APP_PORT:-3141}
+
 ENV CLIENT_HOST=host.docker.internal
 ENV CLIENT_PORT=${APP_PORT}
 
+### SETUP PORTABLE PYTHON ENV ###
+
+# ENV vars for using the pythonproxy
 ENV PIPENV_PYPI_MIRROR=${MIRROR_URL}
 ENV PIP_INDEX_URL=${MIRROR_URL:+${MIRROR_URL}/+simple/}
+ENV PIP_TRUSTED_HOST=${MIRROR_HOST}
 
 # python/pipenv setup and activate overrides
 ENV PATH="${APP_HOME}/.venv/bin:${PATH}" \
     PIPENV_PYTHON="${APP_HOME}/bin/python" \
     PIPENV_YES=1 \
-    PIPENV_VERBOSE=1 \
+    PIPENV_MAX_SUBPROCESS=5 \
     PIPENV_VENV_IN_PROJECT=1 \
     PYTHONUNBUFFERED=1
 
@@ -38,12 +42,14 @@ RUN addgroup --gid "${GID}" "${USER}" && \
 
 # setup app space
 WORKDIR ${APP_HOME}
-COPY ./scripts /scripts
+COPY ./scripts ${APP_HOME}/scripts
+COPY ./scripts/entrypoint.sh /entrypoint.sh
 RUN apt-get update && \
     apt-get install --no-install-recommends -y dumb-init && \
     rm -rf /var/lib/apt/lists/* && \
-    chmod a+x /scripts/*.sh && \
-    pip install pipenv virtualenv
+    chmod a+x ${APP_HOME}/scripts/*.sh /entrypoint.sh
+# trickery for building with local mirror
+RUN pip install pipenv virtualenv
 
 ## copy over our Pipfiles for max cache effort
 # how pipfile was generated:
@@ -52,6 +58,7 @@ COPY ./app/Pipfile ${APP_HOME}/Pipfile
 COPY ./app/Pipfile.lock ${APP_HOME}/Pipfile.lock
 
 # run our package install with sync since we already have a valid lockfile
+# RUN pipenv sync --python=$(which python) --sequential
 RUN pipenv sync --python=$(which python) --verbose
 
 ### END PYTHON ENV SETUP ###
@@ -69,5 +76,5 @@ RUN mkdir -p ${DEVPISERVER_SERVERDIR} ${DEVPICLIENT_CLIENTDIR}
 
 VOLUME ${APP_HOME}/server
 EXPOSE ${APP_PORT}
-ENTRYPOINT [ "/scripts/entrypoint.sh" ]
+ENTRYPOINT [ "/entrypoint.sh" ]
 CMD [ "default" ]
