@@ -7,11 +7,21 @@ steps:
       DOCKER_IMAGE_NAME:
         from_secret: docker_image_name
     commands:
-      - echo $${DOCKER_IMAGE_NAME}
+      - export
       - docker build -t $${DOCKER_IMAGE_NAME} .
     volumes:
       - name: docker_socket
         path: /var/run/docker.sock
+  - name: deliverimage
+    image: docker
+    environment:
+      DOCKER_USERNAME:
+        from_secret: docker_username
+      DOCKER_PASSWORD:
+        from_secret: docker_password
+    commands:
+      - docker login -u $${DOCKER_USERNAME} -p $${DOCKER_PASSWORD}
+      - docker push $${DOCKER_IMAGE_NAME}
 
 volumes:
   - name: docker_socket
