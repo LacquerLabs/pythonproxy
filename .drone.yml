@@ -4,6 +4,7 @@ steps:
   - name: build a docker image
     image: docker
     commands:
+      - echo ${DOCKER_NAME}
       - docker build -t $${DOCKER_NAME} .
     secrets: [ docker_name ]
     volumes:
