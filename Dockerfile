@@ -6,8 +6,10 @@ LABEL org.label-schema.name="PythonProxy" \
       org.label-schema.vcs-url="https://github.com/LacquerLabs/pythonproxy" \
       org.label-schema.vendor="LacquerLabs"
 
+
 ARG APP_HOME
 ARG APP_PORT
+
 ARG MIRROR_URL
 ARG MIRROR_HOST
 
@@ -17,9 +19,13 @@ ENV APP_PORT=${APP_PORT:-3141}
 ENV CLIENT_HOST=host.docker.internal
 ENV CLIENT_PORT=${APP_PORT}
 
+ENV SERVER_THREADS=8
+
 ### SETUP PORTABLE PYTHON ENV ###
 
 # ENV vars for using the pythonproxy
+ENV MIRROR_URL=${MIRROR_URL}
+ENV MIRROR_HOST=${MIRROR_HOST}
 ENV PIPENV_PYPI_MIRROR=${MIRROR_URL}
 ENV PIP_INDEX_URL=${MIRROR_URL:+${MIRROR_URL}/+simple/}
 ENV PIP_TRUSTED_HOST=${MIRROR_HOST}

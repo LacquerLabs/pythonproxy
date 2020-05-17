@@ -27,7 +27,7 @@ if [ "$1" == "default" ]; then
 		fi
 	fi
 	echo "Starting devpi server...."
-	devpi-server --host 0.0.0.0 --port ${APP_PORT} --serverdir ${DEVPISERVER_SERVERDIR}
+	devpi-server --threads ${SERVER_THREADS} --host 0.0.0.0 --port ${APP_PORT} --serverdir ${DEVPISERVER_SERVERDIR}
 elif [ "$1" == "add" ]; then
 	echo "Adding mirror..."
 	${APP_HOME}/scripts/mirror_add.sh $2 $3

@@ -39,41 +39,41 @@ Sending build context to Docker daemon  50.18kB
 Step 1/32 : FROM python:3.6-slim
  ---> 51fbad121fdb
 <--snip-->
- ---> c67012355f9e
-Successfully built c67012355f9e
+Successfully built 71a2e5b1e6fb
 Successfully tagged lacquerlabs/pythonproxy:latest
 
-real	5m11.662s
-user	0m0.189s
-sys	0m0.154s
+real	1m4.499s
+user	0m0.200s
+sys	0m0.333s
+$
 ```
 
-empty cache
+empty cache - first run
 ```
-# time make rebuildwithmirror
-Sending build context to Docker daemon  50.18kB
-Step 1/32 : FROM python:3.6-slim
+$ time make rebuildwithmirror
+Sending build context to Docker daemon  75.78kB
+Step 1/33 : FROM python:3.6-slim
  ---> 51fbad121fdb
- <--snip-->
-Successfully built f7c298e51169
+<--snip-->
+Successfully built 1e2d90c20142
 Successfully tagged lacquerlabs/pythonproxy:latest
 
-real	3m43.375s
-user	0m0.183s
-sys	0m0.127s
+real	1m52.230s
+user	0m0.155s
+sys	0m0.109s
 ```
 
 populated cache
 ```
-# time make rebuildwithmirror
-Sending build context to Docker daemon  50.18kB
-Step 1/32 : FROM python:3.6-slim
+$ time make rebuildwithmirror
+Sending build context to Docker daemon  75.78kB
+Step 1/33 : FROM python:3.6-slim
  ---> 51fbad121fdb
 <--snip-->
-Successfully built e7fa1dabe82c
+Successfully built 26a091fbc136
 Successfully tagged lacquerlabs/pythonproxy:latest
 
-real	2m51.366s
-user	0m0.188s
-sys	0m0.127s
+real	1m0.671s
+user	0m0.150s
+sys	0m0.105s
 ```

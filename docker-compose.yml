@@ -9,7 +9,6 @@ services:
     volumes:
       - ${PWD}/persistent:/app/server
     environment:
-      - CLIENT_HOST=host.docker.internal
-      - CLIENT_PORT=3141
+      - SERVER_THREADS=16
     labels:
       - traefik.enable=false
