@@ -8,7 +8,7 @@ steps:
         from_secret: docker_image_name
     commands:
       - export
-      - docker build -t $${DOCKER_IMAGE_NAME} .
+      - docker build --build-arg VCS_REF=`git rev-parse --short HEAD` -t $${DOCKER_IMAGE_NAME} .
     volumes:
       - name: docker_socket
         path: /var/run/docker.sock

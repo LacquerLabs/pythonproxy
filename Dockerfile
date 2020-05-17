@@ -3,6 +3,12 @@ FROM python:3.6-slim
 ARG APP_HOME
 ARG APP_PORT
 
+# For fancy badges
+ARG VCS_REF
+
+LABEL org.label-schema.vcs-ref=$VCS_REF \
+      org.label-schema.vcs-url="https://github.com/LacquerLabs/pythonproxy"
+
 ### SETUP PORTABLE PYTHON ENV ###
 
 ENV APP_HOME=${APP_HOME:-/app}
