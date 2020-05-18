@@ -14,3 +14,5 @@ services:
       - SERVER_THREADS=16
     labels:
       - traefik.enable=false
+    network_mode: bridge
+
