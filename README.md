@@ -9,34 +9,41 @@ docker build -t pythonproxy .
 
 ## run
 
-docker run -p3141:3141 --name onions --rm -it lacquerlabs/pythonproxy
+`docker run -p3141:3141 --name onions --rm -it lacquerlabs/pythonproxy`
 
-docker-compose up -d
+`docker-compose up -d`
 
 
 ## add a base to mirror
 
 
-docker run --name scallion --rm -it lacquerlabs/pythonproxy add gemfury https://pypi.fury.io/secret/url/
+`docker run --name scallion --rm -it lacquerlabs/pythonproxy add gemfury https://pypi.fury.io/secret/url/`
 
-docker-compose run pythonproxy add gemfury https://pypi.fury.io/secret/url/
+`docker-compose run pythonproxy add gemfury https://pypi.fury.io/secret/url/`
 
 
 ## NOTES
 
 for pip:
-export PIP_INDEX_URL=http://localhost:3141/root/mirror/+simple/
-
-
-export PIPENV_VENV_IN_PROJECT=1
-export PIPENV_PYPI_MIRROR=http://localhost:3141/root/mirror
-
-
-
-
+```
+export PIP_INDEX_URL="http://localhost:3141/root/mirror/+simple/"
+```
+or
+```
 export PIP_INDEX_URL="http://host.docker.internal:3141/root/mirror/+simple/"
 export PIP_TRUSTED_HOST="host.docker.internal"
+```
 
+
+for pipenv:
+
+```
+export PIPENV_VENV_IN_PROJECT=1
+export PIPENV_PYPI_MIRROR=http://localhost:3141/root/mirror
+```
+
+
+```
 
 
 ### Time Tests
