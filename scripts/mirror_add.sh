@@ -17,7 +17,7 @@ if [ $RESULT == 0 ] ; then
     devpi --clientdir ${DEVPICLIENT_CLIENTDIR} index -c root/${NAME} type=mirror mirror_url="${URL}" volatile=False mirror_whitelist="*"
     echo "Setup the root/mirror bases..."
     BASES=`devpi --clientdir ${DEVPICLIENT_CLIENTDIR} index -l | xargs | sed -e 's/ /,/g'`
-    devpi --clientdir ${DEVPICLIENT_CLIENTDIR} index -c root/mirror bases=root/gemfury,root/pypi volatile=True mirror_whitelist="*"
+    devpi --clientdir ${DEVPICLIENT_CLIENTDIR} index -c root/mirror bases=root/pypi,root/gemfury volatile=True mirror_whitelist="*"
     echo "Config complete..."
 else 
     echo "Devpi server did not respond with in 10 seconds..."
